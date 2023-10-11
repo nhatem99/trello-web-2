@@ -22,11 +22,17 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 function Column({ column }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({
-      id: column._id,
-      data: { ...column },
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: column._id,
+    data: { ...column },
+  });
 
   const dndKitColumnStyles = {
     // Nếu sử dụng css.Tranform như docs sẽ lỗi kiểu Strethch
@@ -39,7 +45,7 @@ function Column({ column }) {
     // khó chịu (demo ở video 32) .Lưu ý lúc này phải kểt hơp với {...listeners} nằm ở Box chứ không phải dev ngoài cùng để tránh trường hợp
     // kéo vào vùng xanh
     height: "100%",
-    opacity: isDragging ? 0.5 : undefined
+    opacity: isDragging ? 0.5 : undefined,
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
