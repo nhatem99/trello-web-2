@@ -11,11 +11,17 @@ import { mapOrder } from "~/utils/sorts";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 function Card({ card }) {
-  const { attributes, listeners, setNodeRef, transform, transition , isDragging} =
-    useSortable({
-      id: card._id,
-      data: { ...card },
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: card._id,
+    data: { ...card },
+  });
 
   const dndKitCardStyles = {
     // Nếu sử dụng css.Tranform như docs sẽ lỗi kiểu Strethch
@@ -25,7 +31,7 @@ function Card({ card }) {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : undefined,
-    border: isDragging ? '1px solid #2ecc71' : undefined,
+    border: isDragging ? "1px solid #2ecc71" : undefined,
   };
   const shouldShowCarActions = () => {
     return (
@@ -44,6 +50,7 @@ function Card({ card }) {
         cursor: "pointer",
         boxShadow: "0 1px 1px rgba(0, 0, 0, 0.2)",
         overflow: "unset",
+        display: card?.FE_PlaceholderCard ? "none" : "block",
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
