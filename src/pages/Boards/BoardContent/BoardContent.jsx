@@ -13,9 +13,9 @@ import {
   DragOverlay,
   defaultDropAnimationSideEffects,
   pointerWithin,
-  rectIntersection,
+  // rectIntersection,
   getFirstCollision,
-  closestCenter,
+  // closestCenter,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { cloneDeep } from "lodash";
@@ -327,23 +327,27 @@ function BoardContent({ board }) {
         return closestCorners({ ...args });
       }
 
-      // Tìm các điểm giao nhau, va chạm - intersections với con trỏ
+      // Tìm các điểm giao nhau, va chạm , trả về một mảng các va chạm - intersections với con trỏ
       const pointerIntersections = pointerWithin(args);
+      // Fix triệt để cái bug flickering của thư viện DND-kit trong trường hợp sau
+      // - Kéo một cái card có image cover lớn và kéo lên phía trên cùng ra khỏi khu vực kéo thả
+      if (!pointerIntersections?.length) return;
+      
+      // // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây 
+      // const intersections = !!pointerIntersections?.length
+      //   ? pointerIntersections
+      //   : rectIntersection(args);
 
-      // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
-      const intersections = !!pointerIntersections?.length
-        ? pointerIntersections
-        : rectIntersection(args);
       // Tìm overId đầu tiên trong đám intersections ở trên
-      let overId = getFirstCollision(intersections, "id");
+      let overId = getFirstCollision(pointerIntersections, "id");
       if (overId) {
         // nếu cái over nó là column thì sẽ tìm tới cái cardId gần nhất bên trong khu vực va chạm đó dựa vào thuật toán phát hiện va chạm 
-        // closetCenter hoặc closetCorners đều được. Tuy nhiên ở đây dùng closetCenter sẽ mượt hơn
+        // closetCenter hoặc closetCorners đều được. Tuy nhiên ở đây dùng closestCorners sẽ mượt hơn
         const checkColumn = orderedColumns.find(
           (column) => column._id === overId
         );
         if (checkColumn) {
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(
               (container) => {
